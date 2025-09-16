@@ -1,0 +1,20 @@
+# Check https://docs.docker.com/reference/compose-file for the configuration reference
+services:
+  agent:
+    image: ghcr.io/pcolladosoto/gp1:latest
+    container_name: agent
+    hostname: agent
+
+    # We'll be listening on port 161... We could also
+    # work with capabilities(7), but this is more than
+    # good enough.
+    user: root
+    command: snmpd -f
+
+  manager:
+    image: ghcr.io/pcolladosoto/gp1:latest
+    container_name: manager
+    hostname: manager
+
+    # Simply block forever...
+    command: sleep infinity
