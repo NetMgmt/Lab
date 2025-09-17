@@ -26,6 +26,27 @@ a shell in any of the two available containers with
 
 That's all really!
 
+### Checking connectivity
+The deployment will be set up automatically so that both containers belong to the
+same subnet. What's more, `/etc/hosts` will be configured so that one can refer
+to the other container by name: it couldn't be more convenient! This basically
+means that things work out of the box:
+
+    $ docker exec -it manager ping -c 3 agent
+    PING agent (172.18.0.2) 56(84) bytes of data.
+    64 bytes from agent.gp1_default (172.18.0.2): icmp_seq=1 ttl=64 time=0.174 ms
+    64 bytes from agent.gp1_default (172.18.0.2): icmp_seq=2 ttl=64 time=0.097 ms
+    64 bytes from agent.gp1_default (172.18.0.2): icmp_seq=3 ttl=64 time=0.205 ms
+
+    --- agent ping statistics ---
+    3 packets transmitted, 3 received, 0% packet loss, time 2042ms
+    rtt min/avg/max/mdev = 0.097/0.158/0.205/0.045 ms
+
+Using a more suitable example for the matter at hand:
+
+    $ docker exec -it manager snmpget -c public -v 1 agent system.sysName.0
+    SNMPv2-MIB::sysName.0 = STRING: agent
+
 ## Tearing things down
 When you're done, simply clean everything up with
 
