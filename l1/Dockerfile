@@ -2,10 +2,10 @@ FROM ubuntu:24.04
 
 # Add handy metadata
 LABEL \
-    org.opencontainers.image.vendor="Universidad de Alcalá (UAH)" \
-    org.opencontainers.image.source="https://github.com/scitags/flowd-go"    \
+    org.opencontainers.image.vendor="Universidad de Alcalá (UAH)"    \
+    org.opencontainers.image.source="https://github.com/NetMgmt/gar" \
     org.opencontainers.image.title="gsnmp"                           \
-    org.opencontainers.image.description="SNMP-enabled images" \
+    org.opencontainers.image.description="SNMP-enabled images"       \
     org.opencontainers.image.authors="Pablo Collado Soto"
 
 # Make Ubuntu pull manpages
