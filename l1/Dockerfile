@@ -2,7 +2,7 @@ FROM ghcr.io/netmgmt/base:latest
 
 # Add handy metadata
 LABEL \
-    org.opencontainers.image.title="Lab 02"                    \
+    org.opencontainers.image.title="Lab 01"                    \
     org.opencontainers.image.description="SNMP-enabled images"
 
 # Install the necessary net-snmp goodies (MIBs should be already
