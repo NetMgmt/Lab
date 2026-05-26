@@ -33,6 +33,10 @@ RUN apt install -y \
     nano \
     supervisor
 
+# Reinstall some packages to pull the manpages
+# RUN apt reinstall -y \
+#     bsdutils
+
 # Clean up the apt(8) cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
