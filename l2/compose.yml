@@ -1,0 +1,24 @@
+# Check https://docs.docker.com/reference/compose-file for the configuration reference
+services:
+  manager:
+    image: ghcr.io/netmgmt/gp2:latest
+    container_name: manager
+    hostname: manager
+    networks:
+      gar-net:
+        ipv4_address: 10.0.123.2
+
+  agent:
+    image: ghcr.io/netmgmt/gp2:latest
+    container_name: agent
+    hostname: agent
+    networks:
+      gar-net:
+        ipv4_address: 10.0.123.3
+
+networks:
+  gar-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.123.0/24

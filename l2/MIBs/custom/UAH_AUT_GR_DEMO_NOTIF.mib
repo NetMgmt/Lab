@@ -1,0 +1,88 @@
+UAH-AUT-GR-EXAMPLES-NOTIFICATION-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-IDENTITY, NOTIFICATION-TYPE, enterprises
+        FROM SNMPv2-SMI
+    OBJECT-GROUP, NOTIFICATION-GROUP
+        FROM SNMPv2-CONF
+    DisplayString
+        FROM SNMPv2-TC
+    ucdExperimental
+        FROM UCD-SNMP-MIB;
+
+ucdNotificationTestMib MODULE-IDENTITY
+    LAST-UPDATED "201302140000Z"
+    ORGANIZATION "UAH - Automatica - Telematica - Gestion de Redes"
+    CONTACT-INFO
+        "Primary Contact: Alvaro Paricio
+         email: alvaro.paricio@uah.es"
+    DESCRIPTION "Labs workbench"
+    ::= { uahAutGrTraps 1 }
+
+uahAutGrEvents    OBJECT IDENTIFIER ::= { ucdExperimental 1024 }
+uahAutGrDataModel OBJECT IDENTIFIER ::= { uahAutGrEvents 1 }
+uahAutGrNotifs    OBJECT IDENTIFIER ::= { uahAutGrEvents 2 }
+uahAutGrTraps     OBJECT IDENTIFIER ::= { uahAutGrEvents 3}
+
+uahAutGrNotifEvs     OBJECT IDENTIFIER ::= { uahAutGrNotifs 1 }
+uahAutGrNotifObjects OBJECT IDENTIFIER ::= { uahAutGrNotifs 2 }
+uahAutGrNotifGroups  OBJECT IDENTIFIER ::= { uahAutGrNotifs 3 }
+
+--
+-- Data Model
+--
+DMLogLevel OBJECT-TYPE
+    SYNTAX INTEGER {
+        emergency(0),
+        alert    (1),
+        critical (2),
+        error    (3),
+        warning  (4),
+        notice   (5),
+        info     (6),
+        debug    (7)
+    }
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION "Log level"
+    ::= { uahAutGrDataModel 1 }
+
+DMLogString OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION "Log string"
+    ::= { uahAutGrDataModel 2 }
+
+--
+-- EVENTS CATALOG
+-- Basic event
+--
+uahAutGrNotifEvBasic NOTIFICATION-TYPE
+    STATUS current
+    OBJECTS { sysLocation }
+    DESCRIPTION "UAH. Dpto.Automatica. Gestion de Red. Notification example"
+    ::= { uahAutGrNotifEvs 1 }
+
+--
+-- NOTIFICATION OBJECT-GROUPS
+--
+uahAutGrNotifObjectBasic OBJECT-GROUP
+    OBJECTS {
+        DMLogLevel, DMLogString
+    }
+    STATUS      current
+    DESCRIPTION "Interesting data to be sent"
+    ::= { uahAutGrNotifObjects 1 }
+
+--
+-- NOTIFICATION GROUPS
+--
+-- Basic notification group
+uahAutGrNotifGroupBasic NOTIFICATION-GROUP
+    NOTIFICATIONS { uahAutGrNotifEvBasic }
+    STATUS      current
+    DESCRIPTION "Basic notifications group."
+    ::= { uahAutGrNotifGroups 1 }
+
+END

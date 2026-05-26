@@ -1,0 +1,25 @@
+UAH-AUT-GR-EXAMPLES-TRAP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    TRAP-TYPE
+        FROM RFC-1215
+    ucdExperimental
+        FROM UCD-SNMP-MIB;
+
+uahAutGrEvents    OBJECT IDENTIFIER ::= { ucdExperimental 1024 }
+uahAutGrDataModel OBJECT IDENTIFIER ::= { uahAutGrEvents 1 }
+uahAutGrNotifs    OBJECT IDENTIFIER ::= { uahAutGrEvents 2 }
+uahAutGrTraps     OBJECT IDENTIFIER ::= { uahAutGrEvents 3}
+
+--
+-- TRAP DEFINITIONS
+--
+-- Basic trap
+uahAutGrTrapBasic TRAP-TYPE
+    STATUS current
+    ENTERPRISE uahAutGrTraps
+    VARIABLES { sysLocation, sysName, sysContact }
+    DESCRIPTION "UAH. Dpto.Automatica. Gestion de Red. Trap example"
+    ::= 17
+
+END
