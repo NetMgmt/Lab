@@ -6,6 +6,10 @@ LABEL org.opencontainers.image.vendor="Universidad de Alcalá (UAH)"
 LABEL org.opencontainers.image.source="https://github.com/NetMgmt/gar"
 LABEL org.opencontainers.image.authors="Departamento de Automática"
 
+# We can avoid several warnings shown when installing stuff with apt(8), although
+# modern versions are smart enough to fall back to sane defaults
+# ENV DEBIAN_FRONTEND=noninteractive
+
 # Make Ubuntu pull manpages
 RUN sed -i 's:^path-exclude=/usr/share/man:#path-exclude=/usr/share/man:' /etc/dpkg/dpkg.cfg.d/excludes
 
