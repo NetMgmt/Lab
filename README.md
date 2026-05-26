@@ -22,7 +22,7 @@ Even though you can usually mount a [volume][docker-volume], it'll usually be ea
 [`docker cp`][docker-cp] command to pull individual files if necessary. Be sure to read the documentation,
 but if you want to pull file `/etc/foo.conf` from container `manager` you should be able to run
 
-  $ docker cp manager:/etc/foo.conf foo.conf
+    $ docker cp manager:/etc/foo.conf foo.conf
 
 and the file should now be locally available as `foo.conf`. When providing content for reports be sure to
 include text instead of PNGs and relate image formats: that makes PDFs leaner and searchable!
