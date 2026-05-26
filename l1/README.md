@@ -7,6 +7,12 @@ to run everything. This means you'll need to [install][docker-installation] it o
 your machine before proceeding. This setup will work across operating systems, so you
 can run whatever you prefer.
 
+## Network scenario
+| **Container Name** | **IPv4 CIDR Address** |
+| -----------------: | :-------------------: |
+|            `agent` | 10.0.123.2/24         |
+|          `manager` | 10.0.123.3/24         |
+
 ## Starting things up
 In order to kickstart the setup simply run
 
@@ -19,12 +25,25 @@ You can leverage `docker exec` to do so. In this particular case we can open up
 a shell in any of the two available containers with
 
     # Manager
-    $ docker exec -it manager bash
+    $ docker exec -it -u kenobi manager bash
 
     # Agent
-    $ docker exec -it agent bash
+    $ docker exec -it -u kenobi agent bash
 
 That's all really!
+
+## Starting services
+These containers leverage supervisord as the init system. This simply means that services
+are managed through the `supervisorctl(1)` command. For this particular scenario you can
+start the SNMP daemon, `snmpd(8)` with:
+
+    # Check the available services and their status
+    $ docker exec -it -u kenobi agent supervisorctl status
+
+    # Start the snmpd service
+    $ docker exec -it -u kenobi agent supervisorctl start snmpd
+
+Services are defined on `./conf/supervisord.conf` which is copied to `/etc/supervisord.conf`.
 
 ### Checking connectivity
 The deployment will be set up automatically so that both containers belong to the
@@ -33,14 +52,14 @@ to the other container by name: it couldn't be more convenient! This basically
 means that things work out of the box:
 
     $ docker exec -it manager ping -c 3 agent
-    PING agent (172.18.0.2) 56(84) bytes of data.
-    64 bytes from agent.gp1_default (172.18.0.2): icmp_seq=1 ttl=64 time=0.174 ms
-    64 bytes from agent.gp1_default (172.18.0.2): icmp_seq=2 ttl=64 time=0.097 ms
-    64 bytes from agent.gp1_default (172.18.0.2): icmp_seq=3 ttl=64 time=0.205 ms
+    PING agent (10.0.123.2) 56(84) bytes of data.
+    64 bytes from agent.l1_gar-net (10.0.123.2): icmp_seq=1 ttl=64 time=0.219 ms
+    64 bytes from agent.l1_gar-net (10.0.123.2): icmp_seq=2 ttl=64 time=0.126 ms
+    64 bytes from agent.l1_gar-net (10.0.123.2): icmp_seq=3 ttl=64 time=0.204 ms
 
     --- agent ping statistics ---
-    3 packets transmitted, 3 received, 0% packet loss, time 2042ms
-    rtt min/avg/max/mdev = 0.097/0.158/0.205/0.045 ms
+    3 packets transmitted, 3 received, 0% packet loss, time 2060ms
+    rtt min/avg/max/mdev = 0.126/0.183/0.219/0.040 ms
 
 Using a more suitable example for the matter at hand:
 
@@ -64,9 +83,9 @@ issues.
 
 Building the image is a matter of running
 
-    $ docker build -t ghcr.io/pcolladosoto/gp1:latest .
+    $ docker build -t ghcr.io/netmgmt/gp1:latest .
 
-where `ghcr.io/pcolladosoto/gp1:latest` is the images tag. This basically
+where `ghcr.io/netmgmt/gp1:latest` is the images tag. This basically
 determines where the image will be pushed to to make it readily available.
 
 <!-- REFs -->

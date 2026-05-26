@@ -1,20 +1,24 @@
 # Check https://docs.docker.com/reference/compose-file for the configuration reference
 services:
   agent:
-    image: ghcr.io/pcolladosoto/gp1:latest
+    image: ghcr.io/netmgmt/gp1:latest
     container_name: agent
     hostname: agent
-
-    # We'll be listening on port 161... We could also
-    # work with capabilities(7), but this is more than
-    # good enough.
-    user: root
-    command: snmpd -f
+    networks:
+      gar-net:
+        ipv4_address: 10.0.123.2
 
   manager:
-    image: ghcr.io/pcolladosoto/gp1:latest
+    image: ghcr.io/netmgmt/gp1:latest
     container_name: manager
     hostname: manager
+    networks:
+      gar-net:
+        ipv4_address: 10.0.123.3
 
-    # Simply block forever...
-    command: sleep infinity
+networks:
+  gar-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.123.0/24
