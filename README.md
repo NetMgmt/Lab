@@ -17,6 +17,16 @@ One of the key advantages of leveraging Docker is that we can eschew heavy and l
 underpinning technologies like [Vagrant][vagrant]. Note we distribute images targetting both `x86_64` and
 `aarch64` architectures, so images should be able to run as-is on any machine.
 
+## Getting content out of a container
+Even though you can usually mount a [volume][docker-volume], it'll usually be easier to just leverage the
+[`docker cp`][docker-cp] command to pull individual files if necessary. Be sure to read the documentation,
+but if you want to pull file `/etc/foo.conf` from container `manager` you should be able to run
+
+  $ docker cp manager:/etc/foo.conf foo.conf
+
+and the file should now be locally available as `foo.conf`. When providing content for reports be sure to
+include text instead of PNGs and relate image formats: that makes PDFs leaner and searchable!
+
 ## How are images prepared?
 Images are all built from a base image as explained below. These images leverage [supervisord][supervisord]
 as an init system: more on that below too.
@@ -82,3 +92,5 @@ back to it ASAP!
 [issues]: https://github.com/NetMgmt/gar/issues
 [ubuntu-img]: https://hub.docker.com/_/ubuntu
 [ghcr]: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry
+[docker-volume]: https://docs.docker.com/engine/storage/volumes/
+[docker-cp]: https://docs.docker.com/reference/cli/docker/container/cp/
