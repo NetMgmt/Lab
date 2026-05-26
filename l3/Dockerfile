@@ -1,59 +1,33 @@
-FROM ubuntu:24.04
+FROM ghcr.io/netmgmt/base:latest
 
 # Add handy metadata
 LABEL \
-    org.opencontainers.image.vendor="Universidad de Alcalá (UAH)"    \
-    org.opencontainers.image.source="https://github.com/NetMgmt/gar" \
-    org.opencontainers.image.title="gsyslog"                         \
-    org.opencontainers.image.description="rsyslog-enabled images"    \
-    org.opencontainers.image.authors="Pablo Collado Soto"
-
-# Make Ubuntu pull manpages
-RUN sed -i 's:^path-exclude=/usr/share/man:#path-exclude=/usr/share/man:' /etc/dpkg/dpkg.cfg.d/excludes
-
-# Install manpage goodies
-RUN apt update && apt -y install man
-
-# Trump the nasty default script impersonating man(1)
-RUN mv /usr/bin/man.REAL /usr/bin/man
+    org.opencontainers.image.title="Lab 03"                       \
+    org.opencontainers.image.description="Rsyslog-enabled images"
 
 # Install other goodies:
-#       less(1): the default more(1) is quite a pain...
-#       lsof(1): an easy way to check open sockets (i.e. FDs)
-#   iproute2(8): ifconfig has been deprecated for some time now...
-#       ping(8): to ease checking connectivity
-#        vim(1): a sane (:P) text editor
 #    rsyslog(8): the rsyslog daemon
-# supervisor(1): our init system
 RUN apt update && apt install -y \
-    less \
-    lsof \
-    iproute2 \
-    iputils-ping \
-    vim \
-    rsyslog \
-    supervisor
-
-# Reinstall some packages to the the documentation.
-RUN apt reinstall -y \
-    bsdutils
+    rsyslog
 
 # Clean up the apt(8) cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Setup a non-root user to avoid freaking people out
-RUN useradd -ms /bin/bash kenobi
+# Add kenobi to the adm group so that it can open /var/log/syslog
+RUN usermod -aG adm kenobi
 
-# Use th user's home directory by default
-WORKDIR /home/kenobi
+# Remove the imklog module from syslog's config. It'll emit a warning
+# when failing to open /proc/kmsg. Maybe running in privileged mode
+# can circumvent the issue, but we don't really care ¯\_(ツ)_/¯
+RUN sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
 
-# Log in as kenobi by default
-USER kenobi
+# Allow kenobi to modify the rsyslogd(8) configuration file and add more
+# under /etc/rsyslog.d
+RUN chown    root:kenobi /etc/rsyslog.conf && \
+    chmod           0664 /etc/rsyslog.conf && \
+    chown -R root:kenobi /etc/rsyslog.d    && \
+    chmod -R        0664 /etc/rsyslog.d    && \
+    chmod           0775 /etc/rsyslog.d
 
-COPY ./conf/supervisord.conf /etc/supervisord.conf
-
-# Get some RHEL flair in the prompt
-RUN echo "PS1='[\u@\h \W]\$ '" >> .bashrc
-
-# Start supervisord as PID 1 to handle stuff!
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+# Copy the service definitions
+COPY --chown=root:kenobi ./conf/supervisord.conf /etc/supervisord.conf

@@ -1,46 +1,34 @@
 # Check https://docs.docker.com/reference/compose-file for the configuration reference
 services:
   host-1:
-    image: ghcr.io/pcolladosoto/gp3:latest
+    image: ghcr.io/netmgmt/gp3:latest
     container_name: host-1
     hostname: host-1
 
     networks:
-      rsyslog_net:
+      gar-net:
         ipv4_address: 10.0.123.2
 
-    user: root
-
-    # We'll be listening on port 161... We could also
-    # work with capabilities(7), but this is more than
-    # good enough.
-    # user: root
-    # command: snmpd -f
-
   host-2:
-    image: ghcr.io/pcolladosoto/gp3:latest
+    image: ghcr.io/netmgmt/gp3:latest
     container_name: host-2
     hostname: host-2
 
     networks:
-      rsyslog_net:
+      gar-net:
         ipv4_address: 10.0.123.3
 
-    user: root
-
   host-3:
-    image: ghcr.io/pcolladosoto/gp3:latest
+    image: ghcr.io/netmgmt/gp3:latest
     container_name: host-3
     hostname: host-3
 
     networks:
-      rsyslog_net:
+      gar-net:
         ipv4_address: 10.0.123.4
 
-    user: root
-
 networks:
-  rsyslog_net:
+  gar-net:
     driver: bridge
     ipam:
       config:
