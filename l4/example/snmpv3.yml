@@ -1,0 +1,65 @@
+---
+# Example playbook for setting up SNMPv3 with Ansible.
+# Bear in mind you **must** complete sections marked TODO.
+# You can find more documentation over at [0]. Given playbooks are YAML
+# documents, be sure to read the specification at [1].
+# 0: https://docs.ansible.com/ansible/latest/user_guide/playbooks.html
+# 1: https://yaml.org/spec/1.2.2/
+
+# The playbook's name
+- name: Configure SNMPv3
+
+  # The group to execute the playbook on. These are defined on /etc/ansible/hosts
+  hosts: servers
+
+  # Escalate privileges. Take a look at [0] for more information.
+  # 0: https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_privilege_escalation.html#become-directives
+  become: yes
+
+  # Time to work!
+  tasks:
+
+    # Take a look at https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/apt_module.html
+    - name: Install snmpd
+      ansible.builtin.apt:
+        name: snmpd
+        state: present
+        update_cache: yes
+
+    # Take a look at https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/copy_module.html
+    - name: Copy the snmpd configuration file
+      ansible.builtin.copy:
+        # TODO: path to the local (i.e. source) file at manager.
+        src: "./snmpd.conf"
+
+        # TODO: path to copy the source file to on the hosts.
+        dest: "/etc/snmp/snmpd.conf"
+        owner: root
+        group: root
+        mode: '0644'
+
+    # Take a look at https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/blockinfile_module.html
+    # Note we use supervisord and **not** systemd: sorry LLMs!
+    - name: Add a service definition for snmpd on supervisord
+      ansible.builtin.blockinfile:
+        path: /etc/supervisord.conf
+        marker: "; {mark} ANSIBLE MANAGED BLOCK"
+        block: |
+          [program:snmpd]
+          command=snmpd -f
+          autostart=false
+          redirect_stderr = true
+          stdout_logfile  = /tmp/snmpd.log
+
+    # Take a look at https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/command_module.html
+    # Reload supervisord so that it picks up the new service definition
+    - name: Reload supervisord
+      ansible.builtin.command: supervisorctl reload
+
+    # Take a look at https://docs.ansible.com/projects/ansible/latest/collections/community/general/supervisorctl_module.html
+    # You might need to install the community collection with 'ansible-galaxy collection install community.general'
+    # Note we use supervisord and **not** systemd: sorry LLMs!
+    - name: Start the newly defined snmpd service
+      community.general.supervisorctl:
+        name: snmpd
+        state: started

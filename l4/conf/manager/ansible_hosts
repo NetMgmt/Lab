@@ -1,0 +1,7 @@
+# Ansible inventory
+# Check https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html
+# for more info. The file currently defines the 'servers' group including both
+# host-1 and host-2. Be sure to add more groups as needed!
+[servers]
+10.0.123.2
+10.0.123.3
