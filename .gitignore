@@ -1,3 +1,4 @@
-# Ignore hidden files except .gitignore
+# Ignore hidden files except .gitignore and .gitattributes
 .*
 !.gitignore
+!.gitattributes
