@@ -17,6 +17,27 @@ One of the key advantages of leveraging Docker is that we can eschew heavy and l
 underpinning technologies like [Vagrant][vagrant]. Note we distribute images targetting both `x86_64` and
 `aarch64` architectures, so images should be able to run as-is on any machine.
 
+## How are images prepared?
+Images are all built from a base image as explained below. These images leverage [supervisord][supervisord]
+as an init system: more on that below too.
+
+These images contain 3 users:
+
+- User `root`'s the default one you'll be running as if executing `docker exec ...`. Even though things
+  will work, we advise against doing stuff as root given permissions and such will get jumbled sooner
+  rather than later.
+
+- User `supervisord`'s the one running our init system. You'll rarely (if ever) need to run as this user.
+
+- User `kenobi` as in everyone's favourite Jedi, is the one you should usually run as. Just pass the
+  `-u kenobi` flag when invoking `docker exec ...` and you should be good to go. This is all explained
+  on each scenario so don't worry too much about it.
+
+Be sure to take a look at the different `Dockerfiles` scattered around the repo to learn a bit more about
+the plumbing underlying these images. To get a nice list be sure to run:
+
+    $ find . -name Dockerfile
+
 ## Building Docker images
 Users of the repository needn't be concerned with building the images themselves. However, maintainers do
 need to look into that... On large(-ish) projects image creation's usually automated with `make(1)` or
@@ -28,14 +49,14 @@ as a text editor. Given all images will be needing this we've decided to create 
 build on top of. The `Dockerile` defining this image's contents can be found [here](./Dockerfile). In
 order to build it run:
 
-    $ docker build --platform linux/amd64,linux/arm64 -t ghcr.io/NetMgmt/base:latest .
+    $ docker build --platform linux/amd64,linux/arm64 -t ghcr.io/netmgmt/base:latest .
 
-The above will build the image and tag it with `ghcr.io/NetMgmt/base:latest`. This will allow us
+The above will build the image and tag it with `ghcr.io/netmgmt/base:latest`. This will allow us
 to push the image directly to [GitHub's Container Registry][ghcr]; be sure to read the linked site
 for information on how to set up authentication and the like. Onece built, the image can be pushed
 with:
 
-    $ docker push ghcr.io/NetMgmt/base:latest
+    $ docker push ghcr.io/netmgmt/base:latest
 
 ## A note on supervisord
 Linux systems traditionally leverage [systemd][systemd] to manage services. In our constrained use case
