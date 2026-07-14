@@ -6,7 +6,7 @@ services:
     hostname: host-1
 
     networks:
-      gar-net:
+      lab-net:
         ipv4_address: 10.0.123.2
 
   host-2:
@@ -15,7 +15,7 @@ services:
     hostname: host-2
 
     networks:
-      gar-net:
+      lab-net:
         ipv4_address: 10.0.123.3
 
   manager:
@@ -24,11 +24,11 @@ services:
     hostname: manager
 
     networks:
-      gar-net:
+      lab-net:
         ipv4_address: 10.0.123.4
 
 networks:
-  gar-net:
+  lab-net:
     driver: bridge
     ipam:
       config:

@@ -65,9 +65,9 @@ means that things work out of the box:
 
     $ docker exec -it manager ping -c 3 host-1
     PING host-1 (10.0.123.2) 56(84) bytes of data.
-    64 bytes from host-1.l4_gar-net (10.0.123.2): icmp_seq=1 ttl=64 time=1.79 ms
-    64 bytes from host-1.l4_gar-net (10.0.123.2): icmp_seq=2 ttl=64 time=0.113 ms
-    64 bytes from host-1.l4_gar-net (10.0.123.2): icmp_seq=3 ttl=64 time=0.385 ms
+    64 bytes from host-1.l4_lab-net (10.0.123.2): icmp_seq=1 ttl=64 time=1.79 ms
+    64 bytes from host-1.l4_lab-net (10.0.123.2): icmp_seq=2 ttl=64 time=0.113 ms
+    64 bytes from host-1.l4_lab-net (10.0.123.2): icmp_seq=3 ttl=64 time=0.385 ms
 
     --- host-1 ping statistics ---
     3 packets transmitted, 3 received, 0% packet loss, time 2046ms

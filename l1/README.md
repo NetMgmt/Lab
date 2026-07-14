@@ -53,9 +53,9 @@ means that things work out of the box:
 
     $ docker exec -it manager ping -c 3 agent
     PING agent (10.0.123.2) 56(84) bytes of data.
-    64 bytes from agent.l1_gar-net (10.0.123.2): icmp_seq=1 ttl=64 time=0.219 ms
-    64 bytes from agent.l1_gar-net (10.0.123.2): icmp_seq=2 ttl=64 time=0.126 ms
-    64 bytes from agent.l1_gar-net (10.0.123.2): icmp_seq=3 ttl=64 time=0.204 ms
+    64 bytes from agent.l1_lab-net (10.0.123.2): icmp_seq=1 ttl=64 time=0.219 ms
+    64 bytes from agent.l1_lab-net (10.0.123.2): icmp_seq=2 ttl=64 time=0.126 ms
+    64 bytes from agent.l1_lab-net (10.0.123.2): icmp_seq=3 ttl=64 time=0.204 ms
 
     --- agent ping statistics ---
     3 packets transmitted, 3 received, 0% packet loss, time 2060ms
