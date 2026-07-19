@@ -18,17 +18,15 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # (belonging to group kenobi)
 # can edit the files so that people don't go mad with the lack of sudo(8)
 COPY --chown=root:kenobi MIBs/* /usr/share/snmp/mibs
+COPY --chown=root:kenobi MIBs/custom/ /home/kenobi/.snmp/mibs
 
 # Overwrite the flawed SNMPv2-PDU
 RUN mv /usr/share/snmp/mibs/SNMPv2-PDU /usr/share/snmp/mibs/ietf/SNMPv2-PDU
 
 # Copy the SNMP configurations over. Make sure user kenobi (belonging to group kenobi)
 # can edit the files so that people don't go mad with the lack of sudo(8)
-COPY --chown=root:kenobi conf/snmp.conf /etc/snmp/snmp.conf
-COPY --chown=root:kenobi conf/snmpd.conf /etc/snmp/snmpd.conf
-
-# Copy the initial snmptrapd configuration
-COPY --chown=root:kenobi conf/snmptrapd.p2.conf /etc/snmp/snmptrapd.p2.conf
+COPY --chown=root:kenobi --chmod=0664 conf/snmp.conf /etc/snmp/snmp.conf
+COPY --chown=root:kenobi --chmod=0664 conf/snmpd.conf /etc/snmp/snmpd.conf
 
 # Copy the service definitions
 COPY --chown=root:kenobi ./conf/supervisord.conf /etc/supervisord.conf
@@ -36,15 +34,31 @@ COPY --chown=root:kenobi ./conf/supervisord.conf /etc/supervisord.conf
 # Create a directory for storing all the scripts
 RUN mkdir /home/kenobi/bin && chown kenobi:kenobi /home/kenobi/bin
 
-# Copy the helper scripts for sending traps
+# Copy the helper and trap-processing scripts for sending traps
 COPY --chown=kenobi:kenobi --chmod=0775 ./scripts/helpers/* /home/kenobi/bin
+COPY --chown=kenobi:kenobi --chmod=0775 ./scripts/trap-processing/* /home/kenobi/bin
+
+# Create a symbolic link to the deliverable snmptrapd configuration file
+RUN ln -s /home/kenobi/.deliverables/webMonitor.sh /home/kenobi/bin/webMonitor.sh
 
 # Be nice and include the auxiliary bin directory in the PATH
 ENV PATH=${PATH}:/home/kenobi/bin
 
+# Create a directory for storing user snmp configurations
+RUN mkdir /home/kenobi/snmp && chown kenobi:kenobi /home/kenobi/snmp
+
+# Create a symbolic link to the deliverable snmptrapd configuration file
+RUN ln -s /home/kenobi/.deliverables/snmptrapd.p2.conf /home/kenobi/snmp/snmptrapd.p2.conf
+
 # Create a directory for storing custom MIBs
 RUN mkdir /home/kenobi/mibs && chown kenobi:kenobi /home/kenobi/mibs
+
+# Create a symbolic link to the deliverable MIB file
+RUN ln -s /home/kenobi/.deliverables/LAB_P2.mib /home/kenobi/mibs/LAB_P2.mib
 
 # Make kenobi's home directory world-{listable,readable} so that snmptrapd
 # (i.e. supervisord) can read custom MIB definitions and execute handlers.
 RUN chmod 0777 /home/kenobi
+
+
+

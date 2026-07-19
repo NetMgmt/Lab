@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# force all sh text files to use LF line endings in git and in the working directory (even on Windows)
+*.sh text eol=lf
