@@ -21,13 +21,25 @@ RUN usermod -aG adm kenobi
 # can circumvent the issue, but we don't really care ¯\_(ツ)_/¯
 RUN sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
 
+# Comment 'su root adm' to avoid authority errors on logrotate command. We'll allow kenobi to modify the logrotate configuration files
+RUN sed -i 's/^[[:space:]]*su[[:space:]]\+root[[:space:]]\+adm/# &/' /etc/logrotate.conf
+
 # Allow kenobi to modify the rsyslogd(8) configuration file and add more
 # under /etc/rsyslog.d
-RUN chown    root:kenobi /etc/rsyslog.conf && \
-    chmod           0664 /etc/rsyslog.conf && \
-    chown -R root:kenobi /etc/rsyslog.d    && \
-    chmod -R        0664 /etc/rsyslog.d    && \
-    chmod           0775 /etc/rsyslog.d
+RUN chown    root:kenobi /etc/rsyslog.conf   && \
+    chmod           0664 /etc/rsyslog.conf   && \
+    chown -R root:kenobi /etc/rsyslog.d      && \
+    chmod -R        0664 /etc/rsyslog.d      && \
+    chmod           0775 /etc/rsyslog.d      && \
+    chown -R root:kenobi /var/log            && \
+    chmod -R       g+rwX /var/log            && \
+    chown -R root:kenobi /var/lib/logrotate  && \
+    chmod           0775 /var/lib/logrotate
+
+# Create a symbolic link to the deliverable 30-lab03-uah.conf configuration file
+RUN ln -s /home/kenobi/.deliverables/30-lab03-uah.conf /etc/rsyslog.d/30-lab03-uah.conf
+RUN ln -s /home/kenobi/.deliverables/logrotate-lab03-uah /etc/logrotate.d/logrotate-lab03-uah
+
 
 # Copy the service definitions
 COPY --chown=root:kenobi ./conf/supervisord.conf /etc/supervisord.conf
