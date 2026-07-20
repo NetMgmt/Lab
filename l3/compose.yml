@@ -4,7 +4,8 @@ services:
     image: ghcr.io/netmgmt/gp3:latest
     container_name: host-1
     hostname: host-1
-
+    volumes:
+      - ./deliverables/host1:/home/kenobi/.deliverables
     networks:
       lab-net:
         ipv4_address: 10.0.123.2
@@ -13,7 +14,8 @@ services:
     image: ghcr.io/netmgmt/gp3:latest
     container_name: host-2
     hostname: host-2
-
+    volumes:
+      - ./deliverables/host2:/home/kenobi/.deliverables
     networks:
       lab-net:
         ipv4_address: 10.0.123.3
@@ -22,7 +24,8 @@ services:
     image: ghcr.io/netmgmt/gp3:latest
     container_name: host-3
     hostname: host-3
-
+    volumes:
+      - ./deliverables/host3:/home/kenobi/.deliverables
     networks:
       lab-net:
         ipv4_address: 10.0.123.4
