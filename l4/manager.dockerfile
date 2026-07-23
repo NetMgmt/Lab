@@ -20,6 +20,15 @@ RUN apt-get update && apt-get install -y \
     openssh-client \
     ansible
 
+# Install the necessary net-snmp goodies (MIBs should be already
+# downloaded, but it doesn't hurt to do it again...). We'll install
+# the necessary stuff for both the agent and the manager so as not
+# to duplicate maintenance efforts...
+RUN apt update && apt install -y snmp snmp-mibs-downloader snmpd snmptrapd libsnmp-dev && download-mibs
+
+# Clean up the apt(8) cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Simply leverage the default value, we don't expect this to be set at
 # build time with '--build-arg'.
 ARG SSH_DIR=/home/kenobi/.ssh

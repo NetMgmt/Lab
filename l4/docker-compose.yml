@@ -22,7 +22,8 @@ services:
     image: ghcr.io/netmgmt/gp4-manager:latest
     container_name: manager
     hostname: manager
-
+    volumes:
+      - ./deliverables:/home/kenobi/deliverables
     networks:
       lab-net:
         ipv4_address: 10.0.123.4
