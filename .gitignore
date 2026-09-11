@@ -1,4 +1,5 @@
-# Ignore hidden files except .gitignore and .gitattributes
+# Ignore hidden files except .gitignore, .gitattributes and CI definitions
 .*
 !.gitignore
 !.gitattributes
+!.github/workflows/
