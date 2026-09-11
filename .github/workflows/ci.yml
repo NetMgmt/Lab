@@ -32,3 +32,27 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/netmgmt/base:latest
+
+      - name: Build and push l1 image
+        uses: docker/build-push-action@v7
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./l1
+          push: true
+          tags: ghcr.io/netmgmt/gp1:latest
+
+      - name: Build and push l2 image
+        uses: docker/build-push-action@v7
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./l2
+          push: true
+          tags: ghcr.io/netmgmt/gp2:latest
+
+      - name: Build and push l3 image
+        uses: docker/build-push-action@v7
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./l3
+          push: true
+          tags: ghcr.io/netmgmt/gp3:latest
