@@ -3,7 +3,7 @@ name: Build and push images
 # Only run when stuff's pushed to main (i.e. when PRs are merged)
 on:
   push:
-    # branches: [ main ]
+    branches: [ main ]
 
 jobs:
   docker:
