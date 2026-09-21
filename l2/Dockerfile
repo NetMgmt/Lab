@@ -59,6 +59,3 @@ RUN ln -s /home/kenobi/.deliverables/LAB_P2.mib /home/kenobi/mibs/LAB_P2.mib
 # Make kenobi's home directory world-{listable,readable} so that snmptrapd
 # (i.e. supervisord) can read custom MIB definitions and execute handlers.
 RUN chmod 0777 /home/kenobi
-
-
-
