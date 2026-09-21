@@ -17,7 +17,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Copy over necessary (and potentially conflictive) MIBs. Make sure user kenobi
 # (belonging to group kenobi)
 # can edit the files so that people don't go mad with the lack of sudo(8)
-COPY --chown=root:kenobi MIBs/* /usr/share/snmp/mibs
+COPY --chown=root:kenobi --exclude=UAH*.mib MIBs/* /usr/share/snmp/mibs
 COPY --chown=root:kenobi MIBs/custom/ /home/kenobi/.snmp/mibs
 
 # Overwrite the flawed SNMPv2-PDU
