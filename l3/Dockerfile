@@ -31,8 +31,6 @@ RUN chown    root:kenobi /etc/rsyslog.conf   && \
     chown -R root:kenobi /etc/rsyslog.d      && \
     chmod -R        0664 /etc/rsyslog.d      && \
     chmod           0775 /etc/rsyslog.d      && \
-    chown -R root:kenobi /var/log            && \
-    chmod -R       g+rwX /var/log            && \
     chown -R root:kenobi /var/lib/logrotate  && \
     chmod           0775 /var/lib/logrotate
 
