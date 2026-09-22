@@ -36,15 +36,10 @@ RUN chown    root:kenobi /etc/rsyslog.conf   && \
     chown -R root:kenobi /var/lib/logrotate  && \
     chmod           0775 /var/lib/logrotate
 
-# Create a symbolic link to the deliverable 30-lab03-uah.conf configuration file
+# Create a symbolic links for the deliverable
 RUN ln -s /home/kenobi/.deliverables/30-lab03-uah.conf /etc/rsyslog.d/30-lab03-uah.conf
 RUN ln -s /home/kenobi/.deliverables/logrotate-lab03-uah /etc/logrotate.d/logrotate-lab03-uah
-
-
-# Create a symbolic link to the deliverable 30-lab03-uah.conf configuration file
-RUN ln -s /home/kenobi/.deliverables/30-lab03-uah.conf /etc/rsyslog.d/30-lab03-uah.conf
 RUN ln -s /home/kenobi/.deliverables/logrotate-lab03-uah /etc/rsyslog.d/logrotate-lab03-uah
-
 
 # Copy the service definitions
 COPY --chown=root:kenobi ./conf/supervisord.conf /etc/supervisord.conf
